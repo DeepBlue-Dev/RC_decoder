@@ -6,11 +6,19 @@
  */ 
 
 #define F_CPU 3686400L
+//	margins used for determining if the controller says right or left 
+#define CH1_LOWER_MARGIN 3317	//	0.9 ms
+#define CH1_UPPER_MARGIN 7372	//	2 ms
+#define CH2_LOWER_MARGIN 3317	//	0.9 ms
+#define CH2_UPPER_MARGIN 7372	//	2 ms
+#define NEUTRAL_LOWER_MARGIN 5160	//	1.4 ms
+#define NEUTRAL_UPPER_MARGIN 5898	//	1.6 ms
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
+//	function prototypes
 void INT0_setup(void);
 void INT1_setup(void);
 void TIMER1_setup(void);
