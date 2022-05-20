@@ -69,6 +69,7 @@ int main(void)
 				PORTC_clear();
 				PORTC |= (1 << PORTC2);
 			}
+			ch2_time_available = FALSE;
 		}
     }
 }
