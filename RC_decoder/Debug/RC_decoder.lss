@@ -3,39 +3,39 @@ RC_decoder.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  00000274  2**0
+  0 .data         00000000  00800100  00800100  00000300  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000200  00000000  00000000  00000074  2**1
+  1 .text         0000028c  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000008  00800100  00800100  00000274  2**0
+  2 .bss          00000008  00800100  00800100  00000300  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000274  2**0
+  3 .comment      00000030  00000000  00000000  00000300  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000002a4  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000330  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000058  00000000  00000000  000002e4  2**0
+  5 .debug_aranges 00000070  00000000  00000000  00000370  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000008ee  00000000  00000000  0000033c  2**0
+  6 .debug_info   000009bb  00000000  00000000  000003e0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000077c  00000000  00000000  00000c2a  2**0
+  7 .debug_abbrev 000007b8  00000000  00000000  00000d9b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   0000037b  00000000  00000000  000013a6  2**0
+  8 .debug_line   00000478  00000000  00000000  00001553  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000000bc  00000000  00000000  00001724  2**2
+  9 .debug_frame  000000e0  00000000  00000000  000019cc  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000472  00000000  00000000  000017e0  2**0
+ 10 .debug_str    0000048c  00000000  00000000  00001aac  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000000b8  00000000  00000000  00001c52  2**0
+ 11 .debug_loc    00000100  00000000  00000000  00001f38  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000048  00000000  00000000  00001d0a  2**0
+ 12 .debug_ranges 00000050  00000000  00000000  00002038  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
 
 00000000 <__vectors>:
    0:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__ctors_end>
-   4:	0c 94 52 00 	jmp	0xa4	; 0xa4 <__vector_1>
-   8:	0c 94 72 00 	jmp	0xe4	; 0xe4 <__vector_2>
+   4:	0c 94 d7 00 	jmp	0x1ae	; 0x1ae <__vector_1>
+   8:	0c 94 f7 00 	jmp	0x1ee	; 0x1ee <__vector_2>
    c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
   10:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
   14:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
@@ -86,303 +86,322 @@ Disassembly of section .text:
   92:	a8 30       	cpi	r26, 0x08	; 8
   94:	b2 07       	cpc	r27, r18
   96:	e1 f7       	brne	.-8      	; 0x90 <.do_clear_bss_loop>
-  98:	0e 94 b8 00 	call	0x170	; 0x170 <main>
-  9c:	0c 94 fe 00 	jmp	0x1fc	; 0x1fc <_exit>
+  98:	0e 94 52 00 	call	0xa4	; 0xa4 <main>
+  9c:	0c 94 44 01 	jmp	0x288	; 0x288 <_exit>
 
 000000a0 <__bad_interrupt>:
   a0:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
-000000a4 <__vector_1>:
-			ch2_time_available = FALSE;
-		}
-    }
-}
-
-ISR(INT0_vect){
-  a4:	1f 92       	push	r1
-  a6:	0f 92       	push	r0
-  a8:	0f b6       	in	r0, 0x3f	; 63
-  aa:	0f 92       	push	r0
-  ac:	11 24       	eor	r1, r1
-  ae:	8f 93       	push	r24
-  b0:	9f 93       	push	r25
-	if(PIND & (1 << PIND2)){	//	if CH1 is HIGH
-  b2:	4a 9b       	sbis	0x09, 2	; 9
-  b4:	05 c0       	rjmp	.+10     	; 0xc0 <__vector_1+0x1c>
-		TCNT1 = 0;	//	reset timer back to 0
-  b6:	10 92 85 00 	sts	0x0085, r1	; 0x800085 <__DATA_REGION_ORIGIN__+0x25>
-  ba:	10 92 84 00 	sts	0x0084, r1	; 0x800084 <__DATA_REGION_ORIGIN__+0x24>
-  be:	0b c0       	rjmp	.+22     	; 0xd6 <__vector_1+0x32>
-	} else {
-		ch2_time_available = TRUE;
-  c0:	81 e0       	ldi	r24, 0x01	; 1
-  c2:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <_edata>
-		ch1_end_time = TCNT1;	//	store end time
-  c6:	80 91 84 00 	lds	r24, 0x0084	; 0x800084 <__DATA_REGION_ORIGIN__+0x24>
-  ca:	90 91 85 00 	lds	r25, 0x0085	; 0x800085 <__DATA_REGION_ORIGIN__+0x25>
-  ce:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <ch1_end_time+0x1>
-  d2:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <ch1_end_time>
-	}
-}
-  d6:	9f 91       	pop	r25
-  d8:	8f 91       	pop	r24
-  da:	0f 90       	pop	r0
-  dc:	0f be       	out	0x3f, r0	; 63
-  de:	0f 90       	pop	r0
-  e0:	1f 90       	pop	r1
-  e2:	18 95       	reti
-
-000000e4 <__vector_2>:
-
-ISR(INT1_vect){
-  e4:	1f 92       	push	r1
-  e6:	0f 92       	push	r0
-  e8:	0f b6       	in	r0, 0x3f	; 63
-  ea:	0f 92       	push	r0
-  ec:	11 24       	eor	r1, r1
-  ee:	8f 93       	push	r24
-  f0:	9f 93       	push	r25
-	if(PIND & (1 << PIND3)){	//	if CH2 is HIGH
-  f2:	4b 9b       	sbis	0x09, 3	; 9
-  f4:	09 c0       	rjmp	.+18     	; 0x108 <__vector_2+0x24>
-		ch2_start_time = TCNT1;	//	store time CH2 went HIGH
-  f6:	80 91 84 00 	lds	r24, 0x0084	; 0x800084 <__DATA_REGION_ORIGIN__+0x24>
-  fa:	90 91 85 00 	lds	r25, 0x0085	; 0x800085 <__DATA_REGION_ORIGIN__+0x25>
-  fe:	90 93 03 01 	sts	0x0103, r25	; 0x800103 <ch2_start_time+0x1>
- 102:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <ch2_start_time>
- 106:	0b c0       	rjmp	.+22     	; 0x11e <__vector_2+0x3a>
-	} else {
-		ch2_time_available = TRUE;
- 108:	81 e0       	ldi	r24, 0x01	; 1
- 10a:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <_edata>
-		ch2_end_time = TCNT1;	//	store end time
- 10e:	80 91 84 00 	lds	r24, 0x0084	; 0x800084 <__DATA_REGION_ORIGIN__+0x24>
- 112:	90 91 85 00 	lds	r25, 0x0085	; 0x800085 <__DATA_REGION_ORIGIN__+0x25>
- 116:	90 93 07 01 	sts	0x0107, r25	; 0x800107 <ch2_end_time+0x1>
- 11a:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <ch2_end_time>
-	}
-}
- 11e:	9f 91       	pop	r25
- 120:	8f 91       	pop	r24
- 122:	0f 90       	pop	r0
- 124:	0f be       	out	0x3f, r0	; 63
- 126:	0f 90       	pop	r0
- 128:	1f 90       	pop	r1
- 12a:	18 95       	reti
-
-0000012c <INT0_setup>:
-
-void INT0_setup(void){
-		
-	//	INT0, trigger on rising and falling flank, interrupt enabled
-	EICRA |= (1 << ISC00);
- 12c:	e9 e6       	ldi	r30, 0x69	; 105
- 12e:	f0 e0       	ldi	r31, 0x00	; 0
- 130:	80 81       	ld	r24, Z
- 132:	81 60       	ori	r24, 0x01	; 1
- 134:	80 83       	st	Z, r24
-	EICRA &= ~(1 << ISC01);
- 136:	80 81       	ld	r24, Z
- 138:	8d 7f       	andi	r24, 0xFD	; 253
- 13a:	80 83       	st	Z, r24
-	EIMSK |= (1 << INT0);
- 13c:	e8 9a       	sbi	0x1d, 0	; 29
- 13e:	08 95       	ret
-
-00000140 <INT1_setup>:
-}
-
-void INT1_setup(void){
-	
-	//	INT1, trigger on rising and falling flank, interrupt enabled
-	EICRA |= (1 << ISC10);
- 140:	e9 e6       	ldi	r30, 0x69	; 105
- 142:	f0 e0       	ldi	r31, 0x00	; 0
- 144:	80 81       	ld	r24, Z
- 146:	84 60       	ori	r24, 0x04	; 4
- 148:	80 83       	st	Z, r24
-	EICRA &= ~(1 << ISC11);
- 14a:	80 81       	ld	r24, Z
- 14c:	87 7f       	andi	r24, 0xF7	; 247
- 14e:	80 83       	st	Z, r24
-	EIMSK |= (1 << INT1);
- 150:	e9 9a       	sbi	0x1d, 1	; 29
- 152:	08 95       	ret
-
-00000154 <TIMER1_setup>:
-}
-
-void TIMER1_setup(void){
-	
-	//	timer1 mode 0, no prescaler, no interrupts
-	TCCR1B &= ~((1 << WGM13) | (1 << WGM12) | (1 << CS11) | (1 << CS12));
- 154:	e1 e8       	ldi	r30, 0x81	; 129
- 156:	f0 e0       	ldi	r31, 0x00	; 0
- 158:	80 81       	ld	r24, Z
- 15a:	81 7e       	andi	r24, 0xE1	; 225
- 15c:	80 83       	st	Z, r24
-	TCCR1A &= ~((1 << WGM11) | (1 << WGM10));
- 15e:	a0 e8       	ldi	r26, 0x80	; 128
- 160:	b0 e0       	ldi	r27, 0x00	; 0
- 162:	8c 91       	ld	r24, X
- 164:	8c 7f       	andi	r24, 0xFC	; 252
- 166:	8c 93       	st	X, r24
-	TCCR1B |= (1 << CS10);
- 168:	80 81       	ld	r24, Z
- 16a:	81 60       	ori	r24, 0x01	; 1
- 16c:	80 83       	st	Z, r24
- 16e:	08 95       	ret
-
-00000170 <main>:
-uint8_t ch2_time_available = FALSE;
+000000a4 <main>:
+volatile uint8_t ch1_time_available = FALSE;
+volatile uint8_t ch2_time_available = FALSE;
 
 
 int main(void)
 {
+  a4:	cf 93       	push	r28
+  a6:	df 93       	push	r29
+  a8:	00 d0       	rcall	.+0      	; 0xaa <main+0x6>
+  aa:	cd b7       	in	r28, 0x3d	; 61
+  ac:	de b7       	in	r29, 0x3e	; 62
 	INT0_setup();
- 170:	0e 94 96 00 	call	0x12c	; 0x12c <INT0_setup>
+  ae:	0e 94 1b 01 	call	0x236	; 0x236 <INT0_setup>
 	INT1_setup();
- 174:	0e 94 a0 00 	call	0x140	; 0x140 <INT1_setup>
+  b2:	0e 94 25 01 	call	0x24a	; 0x24a <INT1_setup>
 	TIMER1_setup();
- 178:	0e 94 aa 00 	call	0x154	; 0x154 <TIMER1_setup>
+  b6:	0e 94 2f 01 	call	0x25e	; 0x25e <TIMER1_setup>
 	DDRC = 0xFF;
- 17c:	8f ef       	ldi	r24, 0xFF	; 255
- 17e:	87 b9       	out	0x07, r24	; 7
-	
-    while (TRUE) 
-    {
+  ba:	8f ef       	ldi	r24, 0xFF	; 255
+  bc:	87 b9       	out	0x07, r24	; 7
+	sei();
+  be:	78 94       	sei
+	while (TRUE)
+	{
 		if(ch1_time_available){
- 180:	80 91 01 01 	lds	r24, 0x0101	; 0x800101 <ch1_time_available>
- 184:	88 23       	and	r24, r24
- 186:	d1 f0       	breq	.+52     	; 0x1bc <main+0x4c>
+  c0:	80 91 01 01 	lds	r24, 0x0101	; 0x800101 <ch1_time_available>
+  c4:	88 23       	and	r24, r24
+  c6:	b9 f1       	breq	.+110    	; 0x136 <main+0x92>
+			
 			if(ch1_end_time > NEUTRAL_LOWER_MARGIN && ch1_end_time < NEUTRAL_UPPER_MARGIN){
- 188:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <ch1_end_time>
- 18c:	90 91 05 01 	lds	r25, 0x0105	; 0x800105 <ch1_end_time+0x1>
- 190:	9c 01       	movw	r18, r24
- 192:	29 52       	subi	r18, 0x29	; 41
- 194:	34 41       	sbci	r19, 0x14	; 20
- 196:	21 3e       	cpi	r18, 0xE1	; 225
- 198:	32 40       	sbci	r19, 0x02	; 2
- 19a:	10 f4       	brcc	.+4      	; 0x1a0 <main+0x30>
-				PORTC |= ((1 << PORTC6));
- 19c:	46 9a       	sbi	0x08, 6	; 8
- 19e:	0c c0       	rjmp	.+24     	; 0x1b8 <main+0x48>
-			} else if(ch1_end_time > CH1_LEFT_MARGIN){
- 1a0:	8d 3c       	cpi	r24, 0xCD	; 205
- 1a2:	2c e1       	ldi	r18, 0x1C	; 28
- 1a4:	92 07       	cpc	r25, r18
- 1a6:	18 f0       	brcs	.+6      	; 0x1ae <main+0x3e>
-uint16_t calculate_time_interval(uint16_t start_time, uint16_t end_time){
-	return (end_time - start_time);	//	calculates difference between two timestamps
-}
-
-void PORTC_clear(void){
-	PORTC = 0x00;
- 1a8:	18 b8       	out	0x08, r1	; 8
-		if(ch1_time_available){
-			if(ch1_end_time > NEUTRAL_LOWER_MARGIN && ch1_end_time < NEUTRAL_UPPER_MARGIN){
-				PORTC |= ((1 << PORTC6));
-			} else if(ch1_end_time > CH1_LEFT_MARGIN){
+  c8:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <ch1_end_time>
+  cc:	90 91 07 01 	lds	r25, 0x0107	; 0x800107 <ch1_end_time+0x1>
+  d0:	89 32       	cpi	r24, 0x29	; 41
+  d2:	94 41       	sbci	r25, 0x14	; 20
+  d4:	58 f0       	brcs	.+22     	; 0xec <main+0x48>
+  d6:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <ch1_end_time>
+  da:	90 91 07 01 	lds	r25, 0x0107	; 0x800107 <ch1_end_time+0x1>
+  de:	8a 30       	cpi	r24, 0x0A	; 10
+  e0:	97 41       	sbci	r25, 0x17	; 23
+  e2:	20 f4       	brcc	.+8      	; 0xec <main+0x48>
 				PORTC_clear();
-				PORTC |= ((1 << PORTC5));
- 1aa:	45 9a       	sbi	0x08, 5	; 8
- 1ac:	05 c0       	rjmp	.+10     	; 0x1b8 <main+0x48>
-			} else if (ch1_end_time > CH1_RIGHT_MARGIN)
- 1ae:	86 3f       	cpi	r24, 0xF6	; 246
- 1b0:	9c 40       	sbci	r25, 0x0C	; 12
- 1b2:	10 f0       	brcs	.+4      	; 0x1b8 <main+0x48>
-uint16_t calculate_time_interval(uint16_t start_time, uint16_t end_time){
-	return (end_time - start_time);	//	calculates difference between two timestamps
-}
-
-void PORTC_clear(void){
-	PORTC = 0x00;
- 1b4:	18 b8       	out	0x08, r1	; 8
+  e4:	0e 94 42 01 	call	0x284	; 0x284 <PORTC_clear>
+				PORTC |= ((1 << PORTC6));	//	go straight
+  e8:	46 9a       	sbi	0x08, 6	; 8
+  ea:	23 c0       	rjmp	.+70     	; 0x132 <main+0x8e>
+				} else if(ch1_end_time < NEUTRAL_LOWER_MARGIN && ch1_end_time > CH1_RIGHT_LOWER_MARGIN){
+  ec:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <ch1_end_time>
+  f0:	90 91 07 01 	lds	r25, 0x0107	; 0x800107 <ch1_end_time+0x1>
+  f4:	88 32       	cpi	r24, 0x28	; 40
+  f6:	94 41       	sbci	r25, 0x14	; 20
+  f8:	58 f4       	brcc	.+22     	; 0x110 <main+0x6c>
+  fa:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <ch1_end_time>
+  fe:	90 91 07 01 	lds	r25, 0x0107	; 0x800107 <ch1_end_time+0x1>
+ 102:	86 3f       	cpi	r24, 0xF6	; 246
+ 104:	9c 40       	sbci	r25, 0x0C	; 12
+ 106:	20 f0       	brcs	.+8      	; 0x110 <main+0x6c>
 				PORTC_clear();
-				PORTC |= ((1 << PORTC5));
-			} else if (ch1_end_time > CH1_RIGHT_MARGIN)
+ 108:	0e 94 42 01 	call	0x284	; 0x284 <PORTC_clear>
+				PORTC |= ((1 << PORTC5));	//	turn right
+ 10c:	45 9a       	sbi	0x08, 5	; 8
+ 10e:	11 c0       	rjmp	.+34     	; 0x132 <main+0x8e>
+			} else if (ch1_end_time > NEUTRAL_UPPER_MARGIN && ch1_end_time < CH1_LEFT_UPPER_MARGIN)
+ 110:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <ch1_end_time>
+ 114:	90 91 07 01 	lds	r25, 0x0107	; 0x800107 <ch1_end_time+0x1>
+ 118:	8b 30       	cpi	r24, 0x0B	; 11
+ 11a:	97 41       	sbci	r25, 0x17	; 23
+ 11c:	50 f0       	brcs	.+20     	; 0x132 <main+0x8e>
+ 11e:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <ch1_end_time>
+ 122:	90 91 07 01 	lds	r25, 0x0107	; 0x800107 <ch1_end_time+0x1>
+ 126:	81 3a       	cpi	r24, 0xA1	; 161
+ 128:	9e 41       	sbci	r25, 0x1E	; 30
+ 12a:	18 f4       	brcc	.+6      	; 0x132 <main+0x8e>
 			{
 				PORTC_clear();
-				PORTC |= ((1 << PORTC7));
- 1b6:	47 9a       	sbi	0x08, 7	; 8
-			} 
+ 12c:	0e 94 42 01 	call	0x284	; 0x284 <PORTC_clear>
+				PORTC |= ((1 << PORTC7));	//	turn left
+ 130:	47 9a       	sbi	0x08, 7	; 8
+			}
 			ch1_time_available = FALSE;
- 1b8:	10 92 01 01 	sts	0x0101, r1	; 0x800101 <ch1_time_available>
+ 132:	10 92 01 01 	sts	0x0101, r1	; 0x800101 <ch1_time_available>
 		}
 
 		if(ch2_time_available){
- 1bc:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
- 1c0:	88 23       	and	r24, r24
- 1c2:	f1 f2       	breq	.-68     	; 0x180 <main+0x10>
-			if(ch2_end_time > NEUTRAL_LOWER_MARGIN && ch2_end_time < NEUTRAL_UPPER_MARGIN){
- 1c4:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <ch2_end_time>
- 1c8:	90 91 07 01 	lds	r25, 0x0107	; 0x800107 <ch2_end_time+0x1>
- 1cc:	9c 01       	movw	r18, r24
- 1ce:	29 52       	subi	r18, 0x29	; 41
- 1d0:	34 41       	sbci	r19, 0x14	; 20
- 1d2:	21 3e       	cpi	r18, 0xE1	; 225
- 1d4:	32 40       	sbci	r19, 0x02	; 2
- 1d6:	18 f4       	brcc	.+6      	; 0x1de <main+0x6e>
-uint16_t calculate_time_interval(uint16_t start_time, uint16_t end_time){
-	return (end_time - start_time);	//	calculates difference between two timestamps
-}
-
-void PORTC_clear(void){
-	PORTC = 0x00;
- 1d8:	18 b8       	out	0x08, r1	; 8
-		}
-
-		if(ch2_time_available){
-			if(ch2_end_time > NEUTRAL_LOWER_MARGIN && ch2_end_time < NEUTRAL_UPPER_MARGIN){
+ 136:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
+ 13a:	88 23       	and	r24, r24
+ 13c:	09 f2       	breq	.-126    	; 0xc0 <main+0x1c>
+			
+			volatile uint16_t ch2_time = calculate_time_interval(ch2_start_time, ch2_end_time);
+ 13e:	60 91 02 01 	lds	r22, 0x0102	; 0x800102 <ch2_end_time>
+ 142:	70 91 03 01 	lds	r23, 0x0103	; 0x800103 <ch2_end_time+0x1>
+ 146:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <ch2_start_time>
+ 14a:	90 91 05 01 	lds	r25, 0x0105	; 0x800105 <ch2_start_time+0x1>
+ 14e:	0e 94 3d 01 	call	0x27a	; 0x27a <calculate_time_interval>
+ 152:	9a 83       	std	Y+2, r25	; 0x02
+ 154:	89 83       	std	Y+1, r24	; 0x01
+			if(ch2_time > NEUTRAL_LOWER_MARGIN && ch2_time < NEUTRAL_UPPER_MARGIN){
+ 156:	89 81       	ldd	r24, Y+1	; 0x01
+ 158:	9a 81       	ldd	r25, Y+2	; 0x02
+ 15a:	89 32       	cpi	r24, 0x29	; 41
+ 15c:	94 41       	sbci	r25, 0x14	; 20
+ 15e:	48 f0       	brcs	.+18     	; 0x172 <main+0xce>
+ 160:	89 81       	ldd	r24, Y+1	; 0x01
+ 162:	9a 81       	ldd	r25, Y+2	; 0x02
+ 164:	8a 30       	cpi	r24, 0x0A	; 10
+ 166:	97 41       	sbci	r25, 0x17	; 23
+ 168:	20 f4       	brcc	.+8      	; 0x172 <main+0xce>
 				PORTC_clear();
-				PORTC |= (1 << PORTC1);
- 1da:	41 9a       	sbi	0x08, 1	; 8
- 1dc:	0c c0       	rjmp	.+24     	; 0x1f6 <main+0x86>
-			} else if(ch2_end_time > CH2_FORWARD_MARGIN){
- 1de:	8d 3c       	cpi	r24, 0xCD	; 205
- 1e0:	2c e1       	ldi	r18, 0x1C	; 28
- 1e2:	92 07       	cpc	r25, r18
- 1e4:	18 f0       	brcs	.+6      	; 0x1ec <main+0x7c>
-uint16_t calculate_time_interval(uint16_t start_time, uint16_t end_time){
-	return (end_time - start_time);	//	calculates difference between two timestamps
-}
-
-void PORTC_clear(void){
-	PORTC = 0x00;
- 1e6:	18 b8       	out	0x08, r1	; 8
-			if(ch2_end_time > NEUTRAL_LOWER_MARGIN && ch2_end_time < NEUTRAL_UPPER_MARGIN){
+ 16a:	0e 94 42 01 	call	0x284	; 0x284 <PORTC_clear>
+				PORTC |= (1 << PORTC1);	//	'neutral'
+ 16e:	41 9a       	sbi	0x08, 1	; 8
+ 170:	1b c0       	rjmp	.+54     	; 0x1a8 <main+0x104>
+				} else if(ch2_time > NEUTRAL_UPPER_MARGIN && ch2_time < CH2_FORWARD_UPPER_MARGIN){
+ 172:	89 81       	ldd	r24, Y+1	; 0x01
+ 174:	9a 81       	ldd	r25, Y+2	; 0x02
+ 176:	8b 30       	cpi	r24, 0x0B	; 11
+ 178:	97 41       	sbci	r25, 0x17	; 23
+ 17a:	48 f0       	brcs	.+18     	; 0x18e <main+0xea>
+ 17c:	89 81       	ldd	r24, Y+1	; 0x01
+ 17e:	9a 81       	ldd	r25, Y+2	; 0x02
+ 180:	85 30       	cpi	r24, 0x05	; 5
+ 182:	9f 41       	sbci	r25, 0x1F	; 31
+ 184:	20 f4       	brcc	.+8      	; 0x18e <main+0xea>
 				PORTC_clear();
-				PORTC |= (1 << PORTC1);
-			} else if(ch2_end_time > CH2_FORWARD_MARGIN){
+ 186:	0e 94 42 01 	call	0x284	; 0x284 <PORTC_clear>
+				PORTC |= (1 << PORTC0);	//	go forward
+ 18a:	40 9a       	sbi	0x08, 0	; 8
+ 18c:	0d c0       	rjmp	.+26     	; 0x1a8 <main+0x104>
+				} else if(ch2_time < NEUTRAL_LOWER_MARGIN && ch2_time > CH2_BACK_UPPER_MARGIN){
+ 18e:	89 81       	ldd	r24, Y+1	; 0x01
+ 190:	9a 81       	ldd	r25, Y+2	; 0x02
+ 192:	88 32       	cpi	r24, 0x28	; 40
+ 194:	94 41       	sbci	r25, 0x14	; 20
+ 196:	40 f4       	brcc	.+16     	; 0x1a8 <main+0x104>
+ 198:	89 81       	ldd	r24, Y+1	; 0x01
+ 19a:	9a 81       	ldd	r25, Y+2	; 0x02
+ 19c:	87 36       	cpi	r24, 0x67	; 103
+ 19e:	9e 40       	sbci	r25, 0x0E	; 14
+ 1a0:	18 f0       	brcs	.+6      	; 0x1a8 <main+0x104>
 				PORTC_clear();
-				PORTC |= (1 << PORTC0);
- 1e8:	40 9a       	sbi	0x08, 0	; 8
- 1ea:	05 c0       	rjmp	.+10     	; 0x1f6 <main+0x86>
-			} else if(ch2_end_time > CH2_BACK_MARGIN){
- 1ec:	86 3f       	cpi	r24, 0xF6	; 246
- 1ee:	9c 40       	sbci	r25, 0x0C	; 12
- 1f0:	10 f0       	brcs	.+4      	; 0x1f6 <main+0x86>
-uint16_t calculate_time_interval(uint16_t start_time, uint16_t end_time){
-	return (end_time - start_time);	//	calculates difference between two timestamps
-}
-
-void PORTC_clear(void){
-	PORTC = 0x00;
- 1f2:	18 b8       	out	0x08, r1	; 8
-			} else if(ch2_end_time > CH2_FORWARD_MARGIN){
-				PORTC_clear();
-				PORTC |= (1 << PORTC0);
-			} else if(ch2_end_time > CH2_BACK_MARGIN){
-				PORTC_clear();
-				PORTC |= (1 << PORTC2);
- 1f4:	42 9a       	sbi	0x08, 2	; 8
+ 1a2:	0e 94 42 01 	call	0x284	; 0x284 <PORTC_clear>
+				PORTC |= (1 << PORTC2);	//	go backward
+ 1a6:	42 9a       	sbi	0x08, 2	; 8
 			}
 			ch2_time_available = FALSE;
- 1f6:	10 92 00 01 	sts	0x0100, r1	; 0x800100 <_edata>
- 1fa:	c2 cf       	rjmp	.-124    	; 0x180 <main+0x10>
+ 1a8:	10 92 00 01 	sts	0x0100, r1	; 0x800100 <_edata>
+ 1ac:	89 cf       	rjmp	.-238    	; 0xc0 <main+0x1c>
 
-000001fc <_exit>:
- 1fc:	f8 94       	cli
+000001ae <__vector_1>:
+		}
+	}
+}
 
-000001fe <__stop_program>:
- 1fe:	ff cf       	rjmp	.-2      	; 0x1fe <__stop_program>
+ISR(INT0_vect){
+ 1ae:	1f 92       	push	r1
+ 1b0:	0f 92       	push	r0
+ 1b2:	0f b6       	in	r0, 0x3f	; 63
+ 1b4:	0f 92       	push	r0
+ 1b6:	11 24       	eor	r1, r1
+ 1b8:	8f 93       	push	r24
+ 1ba:	9f 93       	push	r25
+	if(PIND & (1 << PIND2)){	//	if CH1 is HIGH
+ 1bc:	4a 9b       	sbis	0x09, 2	; 9
+ 1be:	05 c0       	rjmp	.+10     	; 0x1ca <__vector_1+0x1c>
+		TCNT1 = 0;	//	reset timer back to 0
+ 1c0:	10 92 85 00 	sts	0x0085, r1	; 0x800085 <__DATA_REGION_ORIGIN__+0x25>
+ 1c4:	10 92 84 00 	sts	0x0084, r1	; 0x800084 <__DATA_REGION_ORIGIN__+0x24>
+ 1c8:	0b c0       	rjmp	.+22     	; 0x1e0 <__vector_1+0x32>
+		} else {
+		ch1_time_available = TRUE;
+ 1ca:	81 e0       	ldi	r24, 0x01	; 1
+ 1cc:	80 93 01 01 	sts	0x0101, r24	; 0x800101 <ch1_time_available>
+		ch1_end_time = TCNT1;	//	store end time
+ 1d0:	80 91 84 00 	lds	r24, 0x0084	; 0x800084 <__DATA_REGION_ORIGIN__+0x24>
+ 1d4:	90 91 85 00 	lds	r25, 0x0085	; 0x800085 <__DATA_REGION_ORIGIN__+0x25>
+ 1d8:	90 93 07 01 	sts	0x0107, r25	; 0x800107 <ch1_end_time+0x1>
+ 1dc:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <ch1_end_time>
+	}
+}
+ 1e0:	9f 91       	pop	r25
+ 1e2:	8f 91       	pop	r24
+ 1e4:	0f 90       	pop	r0
+ 1e6:	0f be       	out	0x3f, r0	; 63
+ 1e8:	0f 90       	pop	r0
+ 1ea:	1f 90       	pop	r1
+ 1ec:	18 95       	reti
+
+000001ee <__vector_2>:
+
+ISR(INT1_vect){
+ 1ee:	1f 92       	push	r1
+ 1f0:	0f 92       	push	r0
+ 1f2:	0f b6       	in	r0, 0x3f	; 63
+ 1f4:	0f 92       	push	r0
+ 1f6:	11 24       	eor	r1, r1
+ 1f8:	8f 93       	push	r24
+ 1fa:	9f 93       	push	r25
+	if(PIND & (1 << PIND3)){	//	if CH2 is HIGH
+ 1fc:	4b 9b       	sbis	0x09, 3	; 9
+ 1fe:	09 c0       	rjmp	.+18     	; 0x212 <__vector_2+0x24>
+		ch2_start_time = TCNT1;	//	store time CH2 went HIGH
+ 200:	80 91 84 00 	lds	r24, 0x0084	; 0x800084 <__DATA_REGION_ORIGIN__+0x24>
+ 204:	90 91 85 00 	lds	r25, 0x0085	; 0x800085 <__DATA_REGION_ORIGIN__+0x25>
+ 208:	90 93 05 01 	sts	0x0105, r25	; 0x800105 <ch2_start_time+0x1>
+ 20c:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <ch2_start_time>
+ 210:	0b c0       	rjmp	.+22     	; 0x228 <__vector_2+0x3a>
+		} else {
+		ch2_time_available = TRUE;
+ 212:	81 e0       	ldi	r24, 0x01	; 1
+ 214:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <_edata>
+		ch2_end_time = TCNT1;	//	store end time
+ 218:	80 91 84 00 	lds	r24, 0x0084	; 0x800084 <__DATA_REGION_ORIGIN__+0x24>
+ 21c:	90 91 85 00 	lds	r25, 0x0085	; 0x800085 <__DATA_REGION_ORIGIN__+0x25>
+ 220:	90 93 03 01 	sts	0x0103, r25	; 0x800103 <ch2_end_time+0x1>
+ 224:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <ch2_end_time>
+	}
+}
+ 228:	9f 91       	pop	r25
+ 22a:	8f 91       	pop	r24
+ 22c:	0f 90       	pop	r0
+ 22e:	0f be       	out	0x3f, r0	; 63
+ 230:	0f 90       	pop	r0
+ 232:	1f 90       	pop	r1
+ 234:	18 95       	reti
+
+00000236 <INT0_setup>:
+#include "RC_lib_aj.h"
+void INT0_setup(void) {
+
+  //	INT0, trigger on rising and falling flank, interrupt enabled
+  EICRA |= (1 << ISC00);
+ 236:	e9 e6       	ldi	r30, 0x69	; 105
+ 238:	f0 e0       	ldi	r31, 0x00	; 0
+ 23a:	80 81       	ld	r24, Z
+ 23c:	81 60       	ori	r24, 0x01	; 1
+ 23e:	80 83       	st	Z, r24
+  EICRA &= ~(1 << ISC01);
+ 240:	80 81       	ld	r24, Z
+ 242:	8d 7f       	andi	r24, 0xFD	; 253
+ 244:	80 83       	st	Z, r24
+  EIMSK |= (1 << INT0);
+ 246:	e8 9a       	sbi	0x1d, 0	; 29
+ 248:	08 95       	ret
+
+0000024a <INT1_setup>:
+}
+
+void INT1_setup(void) {
+
+  //	INT1, trigger on rising and falling flank, interrupt enabled
+  EICRA |= (1 << ISC10);
+ 24a:	e9 e6       	ldi	r30, 0x69	; 105
+ 24c:	f0 e0       	ldi	r31, 0x00	; 0
+ 24e:	80 81       	ld	r24, Z
+ 250:	84 60       	ori	r24, 0x04	; 4
+ 252:	80 83       	st	Z, r24
+  EICRA &= ~(1 << ISC11);
+ 254:	80 81       	ld	r24, Z
+ 256:	87 7f       	andi	r24, 0xF7	; 247
+ 258:	80 83       	st	Z, r24
+  EIMSK |= (1 << INT1);
+ 25a:	e9 9a       	sbi	0x1d, 1	; 29
+ 25c:	08 95       	ret
+
+0000025e <TIMER1_setup>:
+}
+
+void TIMER1_setup(void) {
+
+  //	timer1 mode 0, no prescaler, no interrupts
+  TCCR1B &= ~((1 << WGM13) | (1 << WGM12) | (1 << CS11) | (1 << CS12));
+ 25e:	e1 e8       	ldi	r30, 0x81	; 129
+ 260:	f0 e0       	ldi	r31, 0x00	; 0
+ 262:	80 81       	ld	r24, Z
+ 264:	81 7e       	andi	r24, 0xE1	; 225
+ 266:	80 83       	st	Z, r24
+  TCCR1A &= ~((1 << WGM11) | (1 << WGM10));
+ 268:	a0 e8       	ldi	r26, 0x80	; 128
+ 26a:	b0 e0       	ldi	r27, 0x00	; 0
+ 26c:	8c 91       	ld	r24, X
+ 26e:	8c 7f       	andi	r24, 0xFC	; 252
+ 270:	8c 93       	st	X, r24
+  TCCR1B |= (1 << CS10);
+ 272:	80 81       	ld	r24, Z
+ 274:	81 60       	ori	r24, 0x01	; 1
+ 276:	80 83       	st	Z, r24
+ 278:	08 95       	ret
+
+0000027a <calculate_time_interval>:
+}
+
+uint16_t calculate_time_interval(uint16_t start_time, uint16_t end_time) {
+  return (end_time -
+          start_time); //	calculates difference between two timestamps
+}
+ 27a:	9b 01       	movw	r18, r22
+ 27c:	28 1b       	sub	r18, r24
+ 27e:	39 0b       	sbc	r19, r25
+ 280:	c9 01       	movw	r24, r18
+ 282:	08 95       	ret
+
+00000284 <PORTC_clear>:
+
+void PORTC_clear(void) {
+  PORTC = 0x00; //	set all outputs on PORTC low
+ 284:	18 b8       	out	0x08, r1	; 8
+ 286:	08 95       	ret
+
+00000288 <_exit>:
+ 288:	f8 94       	cli
+
+0000028a <__stop_program>:
+ 28a:	ff cf       	rjmp	.-2      	; 0x28a <__stop_program>
